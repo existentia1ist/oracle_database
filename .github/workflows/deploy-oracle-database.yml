@@ -43,7 +43,7 @@ jobs:
         services:
           oracle_database:
             environment:
-              - HR_PASSWORD=${HR_PASSWORD}
+              - HR_PASSWORD=${{ secrets.ORACLE_PWD }}
             image: container-registry.oracle.com/database/free:latest
             container_name: oracle_database
             env_file:
@@ -78,10 +78,9 @@ jobs:
         sudo docker cp ~/db-sample-schemas/human_resources/ oracle_database:/tmp
 
         echo "=== Install HR database ==="
-        sudo docker exec -i oracle_database sqlplus "sys/${{ secrets.ORACLE_PWD }}@//localhost:1521/FREEPDB1 as sysdba" <<EOC
+        sudo docker exec -i oracle_database sqlplus "sys/{{ secrets.ORACLE_PWD }}@//localhost:1521/FREEPDB1 as sysdba"
         @/tmp/human_resources/hr_install.sql
         $HR_PASSWORD
         USERS
         YES
-        EOC
         EOF
