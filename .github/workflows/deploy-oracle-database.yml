@@ -69,16 +69,16 @@ jobs:
         sudo docker compose up -d
 
         echo "=== Waiting for database to be ready ==="
-        sleep 120 # Даем время контейнеру запуститься
+        sleep 10 # Даем время контейнеру запуститься
         echo | sudo docker ps
         
         echo "=== Copying *.sql to container ==="
         sudo docker cp ~/db-sample-schemas/human_resources/ oracle_database:/tmp
 
-        # echo "=== Install HR database ==="
-        sudo docker exec -i oracle_database sqlplus "sys/${{ secrets.ORACLE_PWD }}@//localhost:1521/FREEPDB1 as sysdba" <<EOC
+        echo "=== Install HR database ==="
+        sudo docker exec -e ORACLE_PWD="${{ secrets.ORACLE_PWD }}" -i oracle_database sqlplus "sys/${{ secrets.ORACLE_PWD }}@//localhost:1521/FREEPDB1 as sysdba" ORACLE_PWD="${{ secrets.ORACLE_PWD }}" <<EOC
         @/tmp/human_resources/hr_install.sql
-        ${{ secrets.ORACLE_PWD }}
+        $ORACLE_PWD
         USERS
         YES
         EOC
