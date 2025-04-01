@@ -73,7 +73,7 @@ jobs:
         echo | sudo docker ps
         
         echo "=== Copying *.sql to container ==="
-        docker cp ~/db-sample-schemas/human_resources/ oracle_database:/tmp
+        sudo docker cp ~/db-sample-schemas/human_resources/ oracle_database:/tmp
 
         # echo "=== Install HR database ==="
         docker exec -i oracle_database sqlplus "sys/${{ secrets.ORACLE_PWD }}@//localhost:1521/FREEPDB1 as sysdba" <<EOC
