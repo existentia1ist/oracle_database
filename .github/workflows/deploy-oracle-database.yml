@@ -17,3 +17,64 @@ jobs:
       uses: webfactory/ssh-agent@v0.7.0
       with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Install Oracle
+      run: |
+        ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+        echo "=== clone repo hr ==="
+        git clone https://github.com/oracle-samples/db-sample-schemas.git
+        
+        echo "=== docker pull ==="
+        docker pull container-registry.oracle.com/database/free:latest
+        
+        echo "=== Creating a volume ==="
+        docker volume create oracledb-volume
+        
+        echo "=== Configuring docker compose ==="
+        mkdir -p oracle_database
+        cd oracle_database
+        sudo tee docker-compose.yml << 'EOL'
+        # oracle database: container configuration
+        services:
+          oracle_database:
+            image: container-registry.oracle.com/database/free:latest
+            container_name: oracle_database
+            env_file:
+              - ./.env
+            volumes:
+              - oracledb-volume:/opt/oracle/oradata:rw
+            hostname: oracledbhost
+            restart: always
+            init: true
+            tty: true
+            ports:
+              - 1521:1521
+        volumes:
+          oracledb-volume:
+            external: true
+        EOL
+
+        echo "=== Setting up environment variables ==="
+        sudo tee /etc/systemd/system/oauth2-proxy.service << 'EOFS'
+        # environment variables (without spaces)
+        ORACLE_PWD=${{ secrets.ORACLE_PWD }}
+        EOFS
+
+        echo "=== Starting up the database ==="
+        docker compose up -d
+        echo | sudo docker ps
+
+        echo "=== Waiting for database to be ready ==="
+        sleep 300 # Даем время контейнеру запуститься
+        
+        echo "=== Copying *.sql to container ==="
+        docker cp ~/db-sample-schemas/human_resources/* oracle_database:/tmp
+
+        # echo "=== Install HR database ==="
+        # docker exec -it oracle_database sqlplus "sys/${{ secrets.ORACLE_PWD }}@//localhost:1521/FREEPDB1 as sysdba"
+        # ALTER SESSION SET CONTAINER = FREEPDB1;
+        # @/tmp/hr_intall.sql
+        # ${{ secrets.ORACLE_PWD }}
+        # USERS
+        # YES   
+        EOF
