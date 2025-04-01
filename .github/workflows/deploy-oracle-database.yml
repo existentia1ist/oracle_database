@@ -60,17 +60,17 @@ jobs:
         EOL
 
         echo "=== Setting up environment variables ==="
-        sudo tee /etc/systemd/system/oauth2-proxy.service << 'EOFS'
+        sudo tee ./.env << 'EOFS'
         # environment variables (without spaces)
         ORACLE_PWD=${{ secrets.ORACLE_PWD }}
         EOFS
 
         echo "=== Starting up the database ==="
         docker compose up -d
-        echo | sudo docker ps
 
         echo "=== Waiting for database to be ready ==="
-        sleep 300 # Даем время контейнеру запуститься
+        sleep 120 # Даем время контейнеру запуститься
+        echo | sudo docker ps
         
         echo "=== Copying *.sql to container ==="
         docker cp ~/db-sample-schemas/human_resources/* oracle_database:/tmp
