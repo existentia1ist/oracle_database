@@ -66,7 +66,7 @@ jobs:
         EOFS
 
         echo "=== Starting up the database ==="
-        sudo docker-compose up -d
+        sudo docker compose up -d
 
         echo "=== Waiting for database to be ready ==="
         sleep 120 # Даем время контейнеру запуститься
