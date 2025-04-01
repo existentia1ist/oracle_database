@@ -30,10 +30,10 @@ jobs:
         git clone https://github.com/oracle-samples/db-sample-schemas.git
         
         echo "=== docker pull ==="
-        docker pull container-registry.oracle.com/database/free:latest
+        sudo docker pull container-registry.oracle.com/database/free:latest
         
         echo "=== Creating a volume ==="
-        docker volume create oracledb-volume
+        sudo docker volume create oracledb-volume
         
         echo "=== Configuring docker compose ==="
         mkdir -p oracle_database
@@ -66,7 +66,7 @@ jobs:
         EOFS
 
         echo "=== Starting up the database ==="
-        docker compose up -d
+        sudo docker-compose up -d
 
         echo "=== Waiting for database to be ready ==="
         sleep 120 # Даем время контейнеру запуститься
