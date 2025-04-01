@@ -27,7 +27,7 @@ jobs:
       run: |
         ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
         echo "=== clone repo hr ==="
-        git clone https://github.com/oracle-samples/db-sample-schemas.git
+        git pull https://github.com/oracle-samples/db-sample-schemas.git
         
         echo "=== docker pull ==="
         sudo docker pull container-registry.oracle.com/database/free:latest
@@ -42,8 +42,6 @@ jobs:
         # oracle database: container configuration
         services:
           oracle_database:
-            environment:
-              - HR_PASSWORD=${{ secrets.ORACLE_PWD }}
             image: container-registry.oracle.com/database/free:latest
             container_name: oracle_database
             env_file:
@@ -76,16 +74,4 @@ jobs:
         
         echo "=== Copying *.sql to container ==="
         sudo docker cp ~/db-sample-schemas/human_resources/ oracle_database:/tmp
-    
-        echo "=== Preparing HR installation ==="
-        sudo docker exec oracle_database bash -c "cat <<'EOT' > /tmp/hr_answers.txt
-        mysecurepassword
-        USERS
-        YES
-        EOT"
-        
-        echo "=== Install HR database ==="
-        sudo docker exec -i oracle_database sqlplus "sys/${{ secrets.ORACLE_PWD }}@//localhost:1521/FREEPDB1 as sysdba" 
-        PROMPT Starting HR schema installation
-        START /tmp/human_resources/hr_install.sql < /tmp/hr_answers.txt
         EOF
