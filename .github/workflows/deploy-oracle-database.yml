@@ -78,7 +78,11 @@ jobs:
         sudo docker cp ~/db-sample-schemas/human_resources/ oracle_database:/tmp
     
         echo "=== Preparing HR installation ==="
-        sudo docker exec oracle_database bash -c "cat > /tmp/hr_answers.txt << ${{ secrets.ORACLE_PWD }}\nUSERS\nYES"
+        sudo docker exec oracle_database bash -c "cat <<'EOT' > /tmp/hr_answers.txt
+        ${{ secrets.HR_PASSWORD }}
+        USERS
+        YES
+        EOT"
         
         echo "=== Install HR database ==="
         sudo docker exec -i oracle_database sqlplus "sys/${{ secrets.ORACLE_PWD }}@//localhost:1521/FREEPDB1 as sysdba" 
