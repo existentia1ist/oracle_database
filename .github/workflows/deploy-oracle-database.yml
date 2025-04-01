@@ -79,7 +79,7 @@ jobs:
     
         echo "=== Preparing HR installation ==="
         sudo docker exec oracle_database bash -c "cat > /tmp/hr_answers.txt << 'EOC'
-        ${{ secrets.HR_PASSWORD }}
+        ${{ secrets.ORACLE_PWD }}
         USERS
         YES
         EOC
