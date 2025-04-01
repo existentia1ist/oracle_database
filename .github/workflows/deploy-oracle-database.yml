@@ -76,7 +76,7 @@ jobs:
         sudo docker cp ~/db-sample-schemas/human_resources/ oracle_database:/tmp
 
         # echo "=== Install HR database ==="
-        docker exec -i oracle_database sqlplus "sys/${{ secrets.ORACLE_PWD }}@//localhost:1521/FREEPDB1 as sysdba" <<EOC
+        sudo docker exec -i oracle_database sqlplus "sys/${{ secrets.ORACLE_PWD }}@//localhost:1521/FREEPDB1 as sysdba" <<EOC
         # ALTER SESSION SET CONTAINER = FREEPDB1;
         @/tmp/human_resources/hr_intall.sql
         ${{ secrets.ORACLE_PWD }}
