@@ -93,7 +93,7 @@ jobs:
 
         echo "=== Starting up the database ==="
         # export DOCKER_CLIENT_TIMEOUT=120
-        sudo docker-compose up -d
+        sudo docker-compose -v up -d
 
         echo "=== Waiting for database to be ready ==="
         sleep 5 # Даем время контейнеру запуститься
