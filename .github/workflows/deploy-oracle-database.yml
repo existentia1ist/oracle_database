@@ -88,7 +88,7 @@ jobs:
         sudo tee ./.env << 'EOFS'
         # environment variables
         ORACLE_PWD=${{ secrets.ORACLE_PWD }}
-        COMPOSE_HTTP_TIMEOUT=120
+        COMPOSE_HTTP_TIMEOUT=300
         EOFS
 
         echo "=== Starting up the database ==="
