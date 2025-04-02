@@ -95,7 +95,7 @@ jobs:
         sudo docker-compose up -d
 
         echo "=== Waiting for database to be ready ==="
-        sleep 10 # Даем время контейнеру запуститься
+        sleep 5 # Даем время контейнеру запуститься
         sudo docker-compose ps --services --filter "status=running"
         
         echo "=== Copying *.sql to container ==="
