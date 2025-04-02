@@ -94,7 +94,7 @@ jobs:
         echo "=== Starting up the database ==="
         sudo systemctl restart docker
         # export DOCKER_CLIENT_TIMEOUT=120
-        sudo docker-compose up -d --verbose
+        sudo docker-compose up -d
 
         echo "=== Waiting for database to be ready ==="
         sleep 5 # Даем время контейнеру запуститься
@@ -102,7 +102,4 @@ jobs:
         
         echo "=== Copying *.sql to container ==="
         sudo docker cp ~/db-sample-schemas/human_resources/ oracle_database:/tmp
-
-        echo "=== Remove secret ==="
-        rm -rf ~/oracle_database/.env
         EOF
