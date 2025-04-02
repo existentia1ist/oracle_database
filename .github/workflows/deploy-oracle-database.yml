@@ -95,7 +95,7 @@ jobs:
 
         echo "=== Waiting for database to be ready ==="
         sleep 10 # Даем время контейнеру запуститься
-        echo | sudo docker ps
+        sudo docker-compose ps --services --filter "status=running" --quiet
         
         echo "=== Copying *.sql to container ==="
         sudo docker cp ~/db-sample-schemas/human_resources/ oracle_database:/tmp
