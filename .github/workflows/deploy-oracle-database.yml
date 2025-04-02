@@ -86,7 +86,7 @@ jobs:
 
         echo "=== Setting up environment variables ==="
         sudo tee ./.env << 'EOFS'
-        # environment variables (without spaces)
+        # environment variables
         ORACLE_PWD=${{ secrets.ORACLE_PWD }}
         EOFS
 
@@ -99,4 +99,7 @@ jobs:
         
         echo "=== Copying *.sql to container ==="
         sudo docker cp ~/db-sample-schemas/human_resources/ oracle_database:/tmp
+
+        echo "=== Remove secret ==="
+        rm -rf ~/oracle_database/.env
         EOF
