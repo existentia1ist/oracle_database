@@ -29,8 +29,23 @@ jobs:
        
         echo "=== Install docker & docker-compose ==="
         sudo apt update -y
-        apt install docker.io -y
-        sudo apt install docker-compose -y
+        
+        if docker --version &> /dev/null
+        then
+          echo "Docker is already installed."
+        else
+          echo "Docker is not installed. Installing..."
+          sudo apt update -y
+          sudo apt install docker.io -y
+        fi
+        
+        if docker-compose --version &> /dev/null
+        then
+          echo "Docker Compose is already installed."
+        else
+          echo "Docker Compose is not installed. Installing..."
+          sudo apt install docker-compose -y
+        fi
         
         echo "=== clone repo hr ==="
         if [ -d "db-sample-schemas" ]; then
@@ -76,7 +91,7 @@ jobs:
         EOFS
 
         echo "=== Starting up the database ==="
-        sudo docker compose up -d
+        sudo docker-compose up -d
 
         echo "=== Waiting for database to be ready ==="
         sleep 10 # Даем время контейнеру запуститься
