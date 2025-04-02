@@ -26,6 +26,12 @@ jobs:
     - name: Install Oracle
       run: |
         ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+       
+        echo "=== Install docker & docker-compose ==="
+        sudo apt update
+        apt install docker.io
+        sudo apt install docker-compose
+        
         echo "=== clone repo hr ==="
         git pull https://github.com/oracle-samples/db-sample-schemas.git
         
