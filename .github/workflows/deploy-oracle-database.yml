@@ -28,9 +28,9 @@ jobs:
         ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
        
         echo "=== Install docker & docker-compose ==="
-        sudo apt update
-        apt install docker.io
-        sudo apt install docker-compose
+        sudo apt update -y
+        apt install docker.io -y
+        sudo apt install docker-compose -y
         
         echo "=== clone repo hr ==="
         git pull https://github.com/oracle-samples/db-sample-schemas.git
