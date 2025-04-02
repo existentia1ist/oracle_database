@@ -92,7 +92,7 @@ jobs:
         EOFS
 
         echo "=== Starting up the database ==="
-        sudo docker-compose --verbose up -d
+        sudo docker-compose up -d
 
         echo "=== Waiting for database to be ready ==="
         sleep 5 # Даем время контейнеру запуститься
