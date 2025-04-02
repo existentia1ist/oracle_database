@@ -92,9 +92,9 @@ jobs:
         EOFS
 
         echo "=== Starting up the database ==="
-        # sudo systemctl restart docker
+        sudo systemctl restart docker
         # export DOCKER_CLIENT_TIMEOUT=120
-        sudo docker-compose up -d
+        sudo docker-compose up -d --verbose
 
         echo "=== Waiting for database to be ready ==="
         sleep 5 # Даем время контейнеру запуститься
