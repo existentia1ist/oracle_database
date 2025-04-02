@@ -33,7 +33,11 @@ jobs:
         sudo apt install docker-compose -y
         
         echo "=== clone repo hr ==="
-        git pull https://github.com/oracle-samples/db-sample-schemas.git
+        if [ -d "db-sample-schemas" ]; then
+          echo "=== Removing existing directory db-sample-schemas ==="
+          rm -rf db-sample-schemas
+        fi
+        git clone https://github.com/oracle-samples/db-sample-schemas.git
         
         echo "=== docker pull ==="
         sudo docker pull container-registry.oracle.com/database/free:latest
