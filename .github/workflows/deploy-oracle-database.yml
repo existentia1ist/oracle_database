@@ -23,14 +23,6 @@ jobs:
         mkdir -p ~/.ssh
         ssh-keyscan ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
     
-    #- name: Update SSH Config
-      #run: |
-       # echo "Host *" >> ~/.ssh/config
-       # echo "  ServerAliveInterval 1200" >> ~/.ssh/config
-       # echo "  TCPKeepAlive yes" >> ~/.ssh/config
-      #  echo "  IPQoS=throughput" >> ~/.ssh/config
-       # sudo systemctl restart ssh
-
     - name: Prepare linux
       run: |
         ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
