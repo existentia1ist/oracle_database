@@ -23,15 +23,15 @@ jobs:
         mkdir -p ~/.ssh
         ssh-keyscan ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
     
-    - name: Update SSH Config
-      run: |
-        echo "Host *" >> ~/.ssh/config
-        echo "  ServerAliveInterval 1200" >> ~/.ssh/config
-        echo "  TCPKeepAlive yes" >> ~/.ssh/config
-        echo "  IPQoS=throughput" >> ~/.ssh/config
-        sudo systemctl restart ssh
+    #- name: Update SSH Config
+      #run: |
+       # echo "Host *" >> ~/.ssh/config
+       # echo "  ServerAliveInterval 1200" >> ~/.ssh/config
+       # echo "  TCPKeepAlive yes" >> ~/.ssh/config
+      #  echo "  IPQoS=throughput" >> ~/.ssh/config
+       # sudo systemctl restart ssh
 
-    - name: Install Oracle
+    - name: Prepare linux
       run: |
         ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
        
@@ -61,6 +61,11 @@ jobs:
           rm -rf db-sample-schemas
         fi
         git clone https://github.com/oracle-samples/db-sample-schemas.git
+        EOF
+
+    - name: Install Oracle
+      run: |
+        ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOC'
         
         echo "=== docker pull ==="
         sudo docker pull container-registry.oracle.com/database/free:latest
@@ -107,4 +112,4 @@ jobs:
         
         echo "=== Copying *.sql to container ==="
         sudo docker cp ~/db-sample-schemas/human_resources/ oracle_database:/tmp
-        EOF
+        EOC
