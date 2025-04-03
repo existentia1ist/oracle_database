@@ -23,7 +23,7 @@ jobs:
         mkdir -p ~/.ssh
         ssh-keyscan ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
     
-    - name: Prepare linux
+    - name: Prepare OS
       run: |
         ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
        
@@ -55,7 +55,7 @@ jobs:
         git clone https://github.com/oracle-samples/db-sample-schemas.git
         EOF
 
-    - name: Install Oracle
+    - name: Prepare container
       run: |
         ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOC'
         
@@ -95,8 +95,14 @@ jobs:
         ORACLE_PWD=${{ secrets.ORACLE_PWD }}
         COMPOSE_HTTP_TIMEOUT=600
         EOFS
+        EOC
 
+    - name: Install Oracle
+      run: |
+        ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOD'
+        
         echo "=== Starting up the database ==="
+        cd ~/oracle_database/
         sudo docker-compose up -d
 
         echo "=== Waiting for database to be ready ==="
@@ -104,4 +110,4 @@ jobs:
         
         echo "=== Copying *.sql to container ==="
         sudo docker cp ~/db-sample-schemas/human_resources/ oracle_database:/tmp
-        EOC
+        EOD
