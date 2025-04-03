@@ -103,7 +103,7 @@ jobs:
         
         echo "=== Starting up the database ==="
         cd ~/oracle_database/
-        sudo docker-compose up -d
+        sudo docker-compose --verbose up -d
 
         echo "=== Waiting for database to be ready ==="
         sudo docker-compose ps --services --filter "status=running"
