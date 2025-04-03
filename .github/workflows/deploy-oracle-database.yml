@@ -26,13 +26,14 @@ jobs:
     - name: Update SSH Config
       run: |
         echo "Host *" >> ~/.ssh/config
-        echo "  ServerAliveInterval 600" >> ~/.ssh/config
+        echo "  ServerAliveInterval 1200" >> ~/.ssh/config
         echo "  TCPKeepAlive yes" >> ~/.ssh/config
         echo "  IPQoS=throughput" >> ~/.ssh/config
+        sudo systemctl restart ssh
 
     - name: Install Oracle
       run: |
-        ssh -o ServerAliveInterval=1200 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+        ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
        
         echo "=== Install docker & docker-compose ==="
         sudo apt update -y
