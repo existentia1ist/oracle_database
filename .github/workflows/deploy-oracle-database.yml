@@ -102,6 +102,7 @@ jobs:
         ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOD'
         
         echo "=== Starting up the database ==="
+        sudo systemctl restart docker
         cd ~/oracle_database/
         sudo docker-compose --verbose up -d
 
